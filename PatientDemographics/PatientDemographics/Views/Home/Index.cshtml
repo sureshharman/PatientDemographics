@@ -1,0 +1,165 @@
+﻿@model PatientDemographics.Models.PatientDataModel
+
+@{
+    ViewBag.Title = "Patient Demographics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Add New Patient</h2>
+
+@section scripts {
+
+    <script type="text/javascript">
+        //Function to reset the controls
+        function ResetDate() {
+            $('#ForeName').val("");
+            $('#SurName').val("");
+            $('#Gender').val("");
+            $('#DateofBirth').val("");
+            $('#HomeNumber').val("");
+            $('#WorkNumber').val("");
+            $('#MobileNumber').val("");
+            $("#ForeNameMsg").empty();
+            $("#SurNameMsg").empty();
+            $("#DateofBirthMsg").empty();
+            $("#HomeNumberMsg").empty();
+            $("#WorkNumberMsg").empty();
+            $("#MobileNumberMsg").empty();
+        };
+        var self = this;
+        // Function to validate phone numbers
+        function PhoneValidate(input) {
+            var regEx = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            if (regEx.test(input))
+                return true;
+            else return false;
+
+        };
+
+        //Function to submit data
+        function SubmitData() {
+            $('#ResponseMsg').empty();
+            // Assigning DOM values to local variables
+            var foreName = $('#ForeName').val();
+            var surName = $('#SurName').val();
+            var gender = $('#Gender').val();
+            var birthDate = $('#DateofBirth').val();
+            var homeNumber = $('#HomeNumber').val();
+            var workNumber = $('#WorkNumber').val();
+            var mobileNumber = $('#MobileNumber').val();
+            if (!(foreName && foreName.length >= 2 && foreName.length <= 50))
+            { $("#ForeNameMsg").html("Please enter fore name between 2 to 50 characters"); return } else { $("#ForeNameMsg").empty(); }
+            if (!(surName && surName.length >= 2 && surName.length <= 50))
+            { $("#SurNameMsg").html("Please enter fore name between 2 to 50 characters"); return; } else $("#SurNameMsg").empty();
+            if (!(gender && gender != 'SelectGender'))
+            { $("#GenderMsg").html("Please select Gender"); return; } else $("#GenderMsg").empty();
+            if (!birthDate)
+            { $("#DateofBirthMsg").html("Please select valid date of birth"); return; } else $("#DateofBirthMsg").empty();
+            if (homeNumber) {
+                if (!self.PhoneValidate(homeNumber))
+                { $("#HomeNumberMsg").html("Please enter a valid phone number"); return; } else $("#HomeNumberMsg").empty();
+            }
+            if (workNumber) {
+                if (!self.PhoneValidate(workNumber))
+                { $("#WorkNumberMsg").html("Please enter a valid phone number"); return; } else $("#WorkNumberMsg").empty();
+            }
+            if (mobileNumber) {
+                if (!self.PhoneValidate(mobileNumber))
+                { $("#MobileNumberMsg").html("Please enter a valid phone number"); return; } else $("#MobileNumberMsg").empty();
+            }
+            // Creating xml data to post
+            var dt = "<PatientDataModel><ForeName>" + $('#ForeName').val() + "</ForeName>" + "<SurName>" + $('#SurName').val() + "</SurName>" + "<Gender>" + $('#Gender').val() + "</Gender>" + "<DateofBirth>" + $('#DateofBirth').val() + "</DateofBirth><TelePhoneNumbers><HomeNumber>" + $('#HomeNumber').val() + "</HomeNumber>" + "<WorkNumber>" + $('#WorkNumber').val() + "</WorkNumber>" + "<MobileNumber>" + $('#MobileNumber').val() + "</MobileNumber></TelePhoneNumbers></PatientDataModel>";
+            // Ajax call to post data
+            $.ajax({
+                url: 'http://'+$(location).attr('host')+'/api/postpatientdata',
+                cache: false,
+                type: 'POST',
+                contentType: 'text/xml',
+                data: dt,
+                statusCode: {
+                    200 /*Created*/: function (data) {
+                        self.ResetDate();
+                        $("#ResponseMsg").html(data);
+
+                    }
+                }
+            })
+             .fail(
+             function (xhr, textStatus, err) {
+                 $("#ResponseMsg").html(err);
+             });
+        }
+    </script>
+}
+<!--DOM Elements-->
+<div class="form-horizontal">
+  <hr />
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Fore Name:</label>
+        <div class="col-md-10">
+            <input type="text" title="ForeName" id="ForeName" class="form-control" />
+            <span id="ForeNameMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Sur Name:</label>
+        <div class="col-md-10">
+            <input type="text" title="SurName" id="SurName" class="form-control" />
+            <span id="SurNameMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Gender:</label>
+        <div class="col-md-10">
+            <select name="Gender" title="Gender" id="Gender" class="form-control">
+                <option value="SelectGender" selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <span id="GenderMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Date of Birth:</label>
+        <div class="col-md-10">
+            <input type="date" title="DateofBirth" id="DateofBirth" class="form-control" />
+            <span id="DateofBirthMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Home Number:</label>
+        <div class="col-md-10">
+            <input type="text" title="HomeNumber" id="HomeNumber" class="form-control" />
+            <span id="HomeNumberMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Work Number:</label>
+        <div class="col-md-10">
+            <input type="text" title="WorkNumber" id="WorkNumber" class="form-control" />
+            <span id="WorkNumberMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-md-2">Mobile Number:</label>
+        <div class="col-md-10">
+            <input type="text" title="MobileNumber" id="MobileNumber" class="form-control" />
+            <span id="MobileNumberMsg" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save Data" class="btn btn-default" onclick="SubmitData()" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <span id="ResponseMsg" style="color:darkblue; font-size:x-large"></span>
+        </div>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("List of patients", "Index", "PatientView", null, null)
+</div>

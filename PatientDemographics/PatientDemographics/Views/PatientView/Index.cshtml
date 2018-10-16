@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Patient Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Patient Details</h2>
+@section scripts {
+    <script type="text/javascript">
+        var self = this;
+        //Function to retrieve patients
+            function getData() {
+                //Creating table to display patients
+                var tblXML = "<table class=\"table table-bordered table-condensed table-striped table-hover sortable\"><tr class=\"danger\">" +
+                "<th data-defaultsign=\"AZ\">Fore Name</th><th data-defaultsign=\"AZ\">Sur Name</th><th data-defaultsign=\"AZ\">Gender</th><th data-defaultsign=\"month\">Date of Birth</th></tr>";
+                var self = this;
+                //GET ajax call
+                $.ajax({
+                    url: 'http://'+ $(location).attr('host')+'/api/getpatientdata',
+                    type: 'GET',
+                    dataType: 'xml',
+                    success: function (xml) {
+                        $(xml).find("PatientRecord").each(function () {
+                            var foreName = $(this).find('ForeName').text();
+                            var surname = $(this).find('SurName').text();
+                            var gender = $(this).find('Gender').text();
+                            //Formatting date of birth
+                            var date = new Date($(this).find('DateofBirth').text());
+                            var month = 1+ date.getMonth() ;
+                            tblXML += "<tr><td>" + foreName + "</td><td>" + surname + "</td><td>" + gender + "</td><td>" + month + "/" + date.getDate() + "/" + date.getFullYear() + "</td></tr>";
+                        });
+                        tblXML += "</table>";
+                        $("#TblContainer").html(tblXML);
+                    }
+                })
+                 .fail(
+                 function (xhr, textStatus, err) {
+                      $("#ResponseMsg").html(err);
+                 });
+            };
+    </script>
+}
+
+<!--DOM to render patients-->
+<div class="form-horizontal">
+    <hr />
+    <input type="button" value="Get Patients" onclick="getData()">
+    <hr/>
+    <span id="TblContainer" class="table-responsive"></span>
+</div>
+<div>
+    @Html.ActionLink("Add Patient", "Index","Home")
+</div>
