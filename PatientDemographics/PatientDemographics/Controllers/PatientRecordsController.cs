@@ -1,43 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
-using PatientDemographics.Models;
-using PatientDemographics.BussinessLayer;
+using PatientDemographicsRepository.Models;
+using PatientDemographicsRepository.BussinessLayer;
 
 namespace PatientDemographics
 {
     public class PatientRecordsController : ApiController
     {
-        private readonly IRepo _repo;
-        public PatientRecordsController(IRepo repo)
+        private readonly IPatientRepository _patientRepo;
+        public PatientRecordsController(IPatientRepository patientRepo)
         {
-            _repo = repo;
+            _patientRepo = patientRepo;
         }
 
-        // GET: api/PatientRecords
-        [Route("api/getpatientdata"), HttpGet]
+        /// <summary>
+        /// This method is used to query patient data from db
+        /// </summary>
+        /// <returns>patient data</returns>
+        [Route("api/patient"), HttpGet]
         public IQueryable<PatientRecord> GetPatientRecords()
         {
-           return _repo.GetPatientRecords();
+            return _patientRepo.GetPatientRecords();
         }
 
-        // POST: api/PatientRecords
-        [Route("api/postpatientdata"), HttpPost]
+
+        /// <summary>
+        /// This method post the patient data to database
+        /// </summary>
+        /// <param name="patientdata"></param>
+        /// <returns>http status code 200 for successful submission</returns>
+        [Route("api/patient"), HttpPost]
         public async Task<IHttpActionResult> PostPatientRecord(PatientDataModel patientdata)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            int returnData = await _repo.PostPatientRecord(patientdata);
+            int returnData = await _patientRepo.PostPatientRecord(patientdata);
             if (returnData == 2)
                 return Conflict();
             else

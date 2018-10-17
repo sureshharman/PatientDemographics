@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using PatientDemographics.Models;
+﻿using System.Web.Mvc;
 
 namespace PatientDemographics.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
+        /// <summary>
+        /// This method returns index view to add patient data in db.
+        /// </summary>
+        /// <returns>view to add patient</returns>
         public ActionResult Index()
         {
             return View();

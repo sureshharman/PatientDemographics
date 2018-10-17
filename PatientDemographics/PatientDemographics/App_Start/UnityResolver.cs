@@ -4,7 +4,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Exceptions;
 
-namespace PatientDemographics
+namespace PatientDemographicsRepository
 {
     internal class UnityResolver : IDependencyResolver
     {

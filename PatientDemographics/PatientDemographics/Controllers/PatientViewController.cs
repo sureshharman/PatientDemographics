@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace PatientDemographics.Controllers
 {
     public class PatientViewController : Controller
     {
-        // GET: PatientView
+        /// <summary>
+        /// This action method is used to render view to display list of patient details
+        /// </summary>
+        /// <returns>view to show patients</returns>
         [Route("PatientView/PatientDetails")]
         public ActionResult Index()
         {

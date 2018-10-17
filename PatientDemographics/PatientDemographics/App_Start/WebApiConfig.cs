@@ -5,9 +5,9 @@ using System.Linq;
 using System.Web.Http;
 using Unity;
 using Unity.Lifetime;
-using PatientDemographics.BussinessLayer;
+using PatientDemographicsRepository.BussinessLayer;
 
-namespace PatientDemographics
+namespace PatientDemographicsRepository
 {
     public static class WebApiConfig
     {
@@ -18,7 +18,7 @@ namespace PatientDemographics
 
             //Configuring dependency resolver
             var container = new UnityContainer();
-            container.RegisterType<IRepo, PatientRepo>();
+            container.RegisterType<IPatientRepository, PatientRepo>();
             config.DependencyResolver = new UnityResolver(container);
 
             // Web API routes

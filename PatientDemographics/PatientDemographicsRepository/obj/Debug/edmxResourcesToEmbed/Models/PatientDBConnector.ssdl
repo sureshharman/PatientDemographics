@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PatientDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="PatientRecord">
+    <Key>
+      <PropertyRef Name="PatientID" />
+    </Key>
+    <Property Name="PatientID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ForeName" Type="varchar" MaxLength="50" />
+    <Property Name="SurName" Type="varchar" MaxLength="50" />
+    <Property Name="Gender" Type="varchar" MaxLength="50" />
+    <Property Name="DateofBirth" Type="datetime2" Precision="7" />
+    <Property Name="HomeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="WorkNumber" Type="varchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="PatientDBModelStoreContainer">
+    <EntitySet Name="PatientRecord" EntityType="Self.PatientRecord" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
